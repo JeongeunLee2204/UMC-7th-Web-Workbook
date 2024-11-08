@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vh;
+}
+
+.loginInput {
+  height: 50px;
+  width: 300px;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+h1 {
+  margin-bottom: 100px;
+  color: white;
+}
+
+.loginBtn {
+  height: 50px;
+  width: 300px;
+  background-color: #f54291;
+  color: white;
+  border-radius: 20px;
+  margin-top: 30px;
+  cursor: pointer;
+}
