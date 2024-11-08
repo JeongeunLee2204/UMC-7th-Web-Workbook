@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -40,13 +41,54 @@ const Button = styled.button`
 
 function Navbar() {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const accessToken = localStorage.getItem("accessToken");
+      const email = localStorage.getItem("email");
+
+      if (accessToken && email) {
+        setIsLoggedIn(true);
+        setUsername(email.split("@")[0]);
+      } else {
+        setIsLoggedIn(false);
+        setUsername("");
+      }
+    };
+
+    checkLoginStatus();
+    window.addEventListener("storage", checkLoginStatus);
+
+    return () => {
+      window.removeEventListener("storage", checkLoginStatus);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("email");
+    setIsLoggedIn(false);
+    navigate("/");
+  };
 
   return (
     <NavbarContainer>
       <Logo onClick={() => navigate("/")}>YONGCHA</Logo>
       <ButtonContainer>
-        <Button onClick={() => navigate("/login")}>로그인</Button>
-        <Button onClick={() => navigate("/signup")}>회원가입</Button>
+        {isLoggedIn ? (
+          <>
+            <Button disabled>{`${username}님 환영합니다!`}</Button>
+            <Button onClick={handleLogout}>로그아웃</Button>
+          </>
+        ) : (
+          <>
+            <Button onClick={() => navigate("/login")}>로그인</Button>
+            <Button onClick={() => navigate("/signup")}>회원가입</Button>
+          </>
+        )}
       </ButtonContainer>
     </NavbarContainer>
   );
