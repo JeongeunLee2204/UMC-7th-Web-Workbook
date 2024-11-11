@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:dev": "nodemon app.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
@@ -30,6 +31,7 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
+    "nodemon": "^3.1.7",
     "vite": "^5.4.8"
   }
 }

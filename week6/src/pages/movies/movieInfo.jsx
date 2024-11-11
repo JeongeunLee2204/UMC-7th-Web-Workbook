@@ -74,18 +74,18 @@ const Container = styled.div`
 `;
 
 const ContentContainer = styled.div`
-  display: flex; /* Flexbox로 좌우 배치 */
-  align-items: center; /* 수직 가운데 정렬 */
-  justify-content: space-between; /* 좌우 요소 간격 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 20px;
-  gap: 20px; /* 요소 간 간격 */
+  gap: 20px;
   background-color: rgba(0, 0, 0, 0.7);
   border-radius: 12px;
   margin: 20px;
 `;
 
 const Content = styled.div`
-  flex: 1; /* 남는 공간을 차지 */
+  flex: 1;
   padding: 20px;
   color: white;
   z-index: 1;
@@ -127,5 +127,5 @@ const PersonImage = styled.img`
 
 const CharacterName = styled.p`
   font-size: 12px;
-  color: gray; /* 작은 회색 글씨 */
+  color: gray;
 `;

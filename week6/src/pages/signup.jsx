@@ -2,6 +2,7 @@ import "./login.css";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 
 const SignUp = () => {
   const schema = yup.object().shape({
@@ -28,9 +29,16 @@ const SignUp = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log("폼 데이터 제출");
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/auth/register",
+        data
+      );
+      console.log("Registration successful:", response.data);
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
 
   return (
