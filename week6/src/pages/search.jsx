@@ -12,8 +12,8 @@ const Container = styled.div`
   background-color: #121212;
   color: white;
   min-height: 100vh;
-  width: 100vw; // 전체 너비 사용
-  overflow-x: hidden; // 가로 스크롤 숨기기
+  width: 100vw;
+  overflow-x: hidden;
 `;
 
 const SearchInput = styled.input`
@@ -23,15 +23,6 @@ const SearchInput = styled.input`
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-`;
-
-const SearchButton = styled.button`
-  padding: 10px 20px;
-  background-color: #e91e63;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 `;
 
 const CardGrid = styled.div`
@@ -69,6 +60,7 @@ const Search = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  let debounceTimeout;
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -98,11 +90,15 @@ const Search = () => {
     }
   };
 
-  const handleSearch = () => {
-    if (query.trim()) {
-      navigate(`?query=${query}`);
-      fetchMovies(query);
-    }
+  const handleSearchChange = (e) => {
+    const newQuery = e.target.value;
+    setQuery(newQuery);
+
+    if (debounceTimeout) clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      navigate(`?query=${newQuery}`);
+      fetchMovies(newQuery);
+    }, 500);
   };
 
   const handleMovieClick = (movieID) => {
@@ -115,10 +111,9 @@ const Search = () => {
         <SearchInput
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleSearchChange}
           placeholder="영화 제목을 입력하세요"
         />
-        <SearchButton onClick={handleSearch}>검색</SearchButton>
       </div>
       {loading ? (
         <CardGrid>

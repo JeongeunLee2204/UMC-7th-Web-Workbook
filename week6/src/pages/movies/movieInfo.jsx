@@ -1,34 +1,38 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { axiosInstance } from "../../apis/axios-instance";
 import styled from "styled-components";
 
+const fetchMovie = async (movieID) => {
+  const response = await axiosInstance.get(`/movie/${movieID}?language=ko-KR`);
+  return response.data;
+};
+
+const fetchCredits = async (movieID) => {
+  const response = await axiosInstance.get(
+    `/movie/${movieID}/credits?language=ko-KR`
+  );
+  return response.data;
+};
+
 const MovieInfo = () => {
-  const { movieID } = useParams(); // URL에서 영화 ID 추출
-  const [movie, setMovie] = useState(null);
-  const [credits, setCredits] = useState(null); // 출연진 정보
+  const { movieID } = useParams();
 
-  useEffect(() => {
-    const fetchMovieData = async () => {
-      try {
-        const movieResponse = await axiosInstance.get(
-          `/movie/${movieID}?language=ko-KR`
-        );
-        setMovie(movieResponse.data);
+  const {
+    data: movie,
+    isLoading: isMovieLoading,
+    isError: isMovieError,
+  } = useQuery(["movie", movieID], () => fetchMovie(movieID));
 
-        const creditsResponse = await axiosInstance.get(
-          `/movie/${movieID}/credits?language=ko-KR`
-        );
-        setCredits(creditsResponse.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const {
+    data: credits,
+    isLoading: isCreditsLoading,
+    isError: isCreditsError,
+  } = useQuery(["credits", movieID], () => fetchCredits(movieID));
 
-    fetchMovieData();
-  }, [movieID]);
-
-  if (!movie || !credits) return <p>로딩 중...</p>;
+  if (isMovieLoading || isCreditsLoading) return <p>로딩 중...</p>;
+  if (isMovieError || isCreditsError)
+    return <p>에러가 발생했습니다. 잠시 후 다시 시도해주세요.</p>;
 
   return (
     <Container>
